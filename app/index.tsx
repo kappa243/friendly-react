@@ -1,6 +1,6 @@
 import { Text, View } from "react-native";
 import {UserView} from "@/components/user_profile/UserProfile"
-
+import {OwnProfileView} from "@/components/own_profile/OwnProfile"
 
 
 export default function Index() {
@@ -16,6 +16,7 @@ export default function Index() {
     // </View>
 
     // for testing without navigation 
-    UserView()
+    <OwnProfileView/>
+    //<UserView/>
   );
 }
