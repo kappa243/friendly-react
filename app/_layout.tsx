@@ -56,7 +56,6 @@ export default function RootLayout() {
       router.replace("/(home)");
     }
 
-    console.log(user, navState.key, fontsLoaded, router);
   }, [user, navState.key, fontsLoaded, router, authReady]);
 
   // hide splash screen when app is ready
