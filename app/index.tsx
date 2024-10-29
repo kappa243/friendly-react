@@ -1,17 +1,16 @@
-import { Text, View } from "react-native";
-
-
+import { TView } from "@/components/theme/TView";
+import { ActivityIndicator } from "react-native";
 
 export default function Index() {
   return (
-    <View
+    <TView
       style={{
         flex: 1,
         justifyContent: "center",
         alignItems: "center",
       }}
     >
-      <Text>Hello world!</Text>
-    </View>
+      <ActivityIndicator size="large" />
+    </TView>
   );
 }
