@@ -1,0 +1,14 @@
+{
+  "editor.codeActionsOnSave": {
+    // For ESLint
+    "source.fixAll.eslint": "explicit",
+    // For TSLint
+    "source.fixAll.tslint": "explicit",
+    // For Stylelint
+    "source.fixAll.stylelint": "explicit"
+  },
+  "eslint.validate": [
+    "javascript"
+  ],
+  "files.eol": "\n"
+}

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "650705009399",
+    "project_id": "friendly-react",
+    "storage_bucket": "friendly-react.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650705009399:android:1418291621bb21d2b971f2",
+        "android_client_info": {
+          "package_name": "com.example.friendly"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAWb4Z6JogCLII0P-MG6LdlLrmYbkQsYfQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
