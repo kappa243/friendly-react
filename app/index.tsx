@@ -1,21 +1,16 @@
-import { Text, View } from "react-native";
-import {UserView} from "@/components/user_profile/UserProfile"
-
-
+import { TView } from "@/components/theme/TView";
+import { ActivityIndicator } from "react-native";
 
 export default function Index() {
   return (
-    // <View
-    //   style={{
-    //     flex: 1,
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //   }}
-    // >
-    //   <Text>Hello world!</Text>
-    // </View>
-
-    // for testing without navigation 
-    UserView()
+    <TView
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <ActivityIndicator size="large" />
+    </TView>
   );
 }

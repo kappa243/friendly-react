@@ -1,21 +1,24 @@
 import { StyleSheet } from "react-native";
 import Animated, {
-  useSharedValue,
   useAnimatedStyle,
-  withTiming,
+  useSharedValue,
   withRepeat,
   withSequence,
+  withTiming,
 } from "react-native-reanimated";
-
-import { ThemedText } from "@/components/ThemedText";
+import { useEffect } from "react";
+import { TText } from "@/components/theme/TText";
 
 export function HelloWave() {
   const rotationAnimation = useSharedValue(0);
 
-  rotationAnimation.value = withRepeat(
-    withSequence(withTiming(25, { duration: 150 }), withTiming(0, { duration: 150 })),
-    4 // Run the animation 4 times
-  );
+  useEffect(() => {
+    rotationAnimation.value = withRepeat(
+      withSequence(withTiming(25, { duration: 150 }), withTiming(0, { duration: 150 })),
+      4 // Run the animation 4 times
+    );
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{ rotate: `${rotationAnimation.value}deg` }],
@@ -23,7 +26,7 @@ export function HelloWave() {
 
   return (
     <Animated.View style={animatedStyle}>
-      <ThemedText style={styles.text}>👋</ThemedText>
+      <TText style={styles.text}>👋</TText>
     </Animated.View>
   );
 }
