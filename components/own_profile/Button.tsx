@@ -11,18 +11,17 @@ export default function UserProfileButton({ title, onPress }) {
 
 const stylesButton = StyleSheet.create({
   button: {
-    backgroundColor: '#2f2c2a',
+    backgroundColor: '#098fb6',
     paddingHorizontal: 20,
     paddingVertical: 10,
-    marginTop: 0,
+    marginTop: 10,
     marginBottom: 20,
     marginHorizontal: 10,
-    borderRadius: 12,
+    borderRadius: 6,
     alignItems: 'center',
   },
   buttonText: {
-    color: '#ece0d7',
+    color: 'white',
     fontSize: 16,
-    fontWeight: '600',
   },
 });

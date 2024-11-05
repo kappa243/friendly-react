@@ -1,3 +1,0 @@
-Profil użytkownika 
-[T] Ekran z danymi (nazwa, avatar, znajomi) (można użyć komponentów z zarządzania kontem) 
-[T] Przekierowanie z listy użytkowników do konkretnego profilu 

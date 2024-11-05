@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Image, StyleSheet } from 'react-native';
+import { TextInput, Image, StyleSheet } from 'react-native';
+import { TText } from "@/components/theme/TText";
+import { TView } from "@/components/theme/TView";
 import styles from '@/constants/ProfileStyles'
 import UserProfileButton from '@/components/own_profile/Button'
 
 
-export function OwnProfileView() {
+export default function OwnProfileView() {
   const [isEditingPhoto, setIsEditingPhoto] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
@@ -18,20 +20,18 @@ export function OwnProfileView() {
 
   const [imageUri, setImageUri] = useState('https://fwcdn.pl/fcp/68/48/476848/12529.1.jpg');
 
-  const saveChanges = (field) => {
+  const saveChanges = (field: any) => {
     if (field === 'photo') setIsEditingPhoto(false);
     if (field === 'name') setIsEditingName(false);
     if (field === 'description') setIsEditingDescription(false);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>User profile management</Text>
-      
-      <View style={styles.userBox}>
+    <TView style={styles.container}>    
+      <TView style={styles.userBox}>
 
         {/* TODO: editing photo url needs to be replaced with uploading photo from gallery*/}
-        <View style={inputStyles.editableColumn}>
+        <TView style={inputStyles.editableColumn}>
           {isEditingPhoto ? (
             <TextInput
               value={imageUri}
@@ -46,9 +46,9 @@ export function OwnProfileView() {
             title={isEditingPhoto ? 'Save' : 'Change photo'}
             onPress={() => (isEditingPhoto ? saveChanges('photo') : setIsEditingPhoto(true))}
           />
-        </View>
+        </TView>
 
-        <View style={inputStyles.editableColumn}>
+        <TView style={inputStyles.editableColumn}>
           {isEditingName ? (
             <TextInput
               value={userName}
@@ -57,15 +57,15 @@ export function OwnProfileView() {
               placeholder="Enter user name"
             />
           ) : (
-            <Text style={styles.userName}>{userName}</Text>
+            <TText  type="title">{userName}</TText>
           )}
           <UserProfileButton 
             title={isEditingName ? 'Save' : 'Change name'}
             onPress={() => (isEditingName ? saveChanges('name') : setIsEditingName(true))}
           />
-        </View>
+        </TView>
 
-        <View style={inputStyles.editableColumn}>
+        <TView style={inputStyles.editableColumn}>
           {isEditingDescription ? (
             <TextInput
               value={userDescription}
@@ -75,40 +75,34 @@ export function OwnProfileView() {
               multiline
             />
           ) : (
-            <Text style={styles.userDescription}>{userDescription}</Text>
+            <TText>{userDescription}</TText>
           )}
           <UserProfileButton 
             title={isEditingDescription ? 'Save' : 'Change description'}
             onPress={() => (isEditingDescription ? saveChanges('description') : setIsEditingDescription(true))}
           />
-        </View>
+        </TView>
 
-      </View>
-    </View>
+      </TView>
+    </TView>
   );
 }
 
 const inputStyles = StyleSheet.create({
-  editableRow: { 
-    flexDirection: 'row', 
-    alignItems: 'center', 
-    marginVertical: 10,
-  },
-
   editableColumn: { 
     flexDirection: 'column',
     alignItems: 'center', 
-    marginVertical: 5, 
   },
 
   userProfileButton: { 
-    backgroundColor: 'red', 
     paddingHorizontal: 5, 
     margin: 2, 
   },
 
   input: {
     borderBottomWidth: 1, 
+    fontSize: 16,
+    lineHeight: 24,
   },
 
   usernameInput: {

@@ -47,9 +47,9 @@ const styles = StyleSheet.create({
     friendBox: {
       flex: 1,
       flexDirection: 'row',
-      padding: 10,
-      backgroundColor: '#ece0d7',
-      marginVertical: 8,
+      padding: 6,
+      backgroundColor: '#D8FFFF',
+      marginVertical: 6,
       borderRadius: 12,
       margin: 6,
       elevation: 3,
@@ -61,8 +61,8 @@ const styles = StyleSheet.create({
     },
 
     friendPhoto: {
-        width: 80,
-        height: 80,
+        width: 64,
+        height: 64,
         marginRight: 12,
         borderRadius: 6,
         elevation: 3,

@@ -1,22 +1,16 @@
-import { Text, View } from "react-native";
-import {UserView} from "@/components/user_profile/UserProfile"
-import {OwnProfileView} from "@/components/own_profile/OwnProfile"
-
+import { TView } from "@/components/theme/TView";
+import { ActivityIndicator } from "react-native";
 
 export default function Index() {
   return (
-    // <View
-    //   style={{
-    //     flex: 1,
-    //     justifyContent: "center",
-    //     alignItems: "center",
-    //   }}
-    // >
-    //   <Text>Hello world!</Text>
-    // </View>
-
-    // for testing without navigation 
-    <OwnProfileView/>
-    //<UserView/>
+    <TView
+      style={{
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
+      <ActivityIndicator size="large" />
+    </TView>
   );
 }
