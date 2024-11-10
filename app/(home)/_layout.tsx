@@ -39,12 +39,16 @@ export default function Home() {
           <TabBarIcon name={focused ? "home" : "home-outline"} color={color} />
         ))
       }} />
-      <Tabs.Screen name="profile" options={{
-        title: "Profile",
-        tabBarIcon: (({ focused, color }) => (
-          <TabBarIcon name={focused ? "person" : "person-outline"} color={color} />
-        ))
-      }}/>
+      <Tabs.Screen
+        name="profile/[id]"
+        initialParams={{ id: "0" }}
+        options={{
+          title: "Profile",
+          tabBarIcon: ({ focused, color }) => (
+            <TabBarIcon name={focused ? "person" : "person-outline"} color={color} />
+          ),
+        }}
+      />
       <Tabs.Screen name="edit_profile" options={{
         title: "Edit Profile",
         tabBarIcon: (({ focused, color }) => (

@@ -7,6 +7,7 @@ import { Href } from "expo-router";
 export default function Index() {
 
   const { user } = useUserStore();
+  const id = "0"
 
   return (
     <TView
@@ -18,7 +19,7 @@ export default function Index() {
     >
       <TText>Welcome back <TText style={{ color: "red", fontWeight: "bold" }}>{user?.email}</TText>!</TText>
       <TRouterLink href={"/(home)/test" as Href<string>}>Settings</TRouterLink>
-      <TRouterLink href={"/(home)/profile" as Href<string>}>User profile</TRouterLink>
+      <TRouterLink href={`/(home)/profile/${id}` as Href<string>}>User profile</TRouterLink>
       <TRouterLink href={"/(home)/edit_profile" as Href<string>}>Edit profile</TRouterLink>
 
     </TView>

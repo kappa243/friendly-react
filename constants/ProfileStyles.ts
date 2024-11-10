@@ -45,19 +45,22 @@ const styles = StyleSheet.create({
     },
 
     friendBox: {
-      flex: 1,
-      flexDirection: 'row',
       padding: 6,
-      backgroundColor: '#D8FFFF',
+      width: '100%',
+      flexDirection: 'row',
+      backgroundColor: '#dcecf2',
       marginVertical: 6,
       borderRadius: 12,
-      margin: 6,
       elevation: 3,
       alignItems: 'center',
     },
 
     friendUserName: {
       fontSize: 18,
+      paddingVertical: 20,
+      paddingHorizontal: 6,
+      width: '100%', 
+      color: 'black'
     },
 
     friendPhoto: {
@@ -71,7 +74,8 @@ const styles = StyleSheet.create({
     friendsList: {
         flex: 1,
         width: '100%',
-    }
+    },
+
   });
 
 export default styles;
