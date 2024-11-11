@@ -1,4 +1,4 @@
-import AuthForm from "@/components/auth/Form";
+import AuthForm from "@/components/auth/AuthForm";
 import KeyboardDismissView from "@/components/auth/KeyboardDismissView";
 import TRouterLink from "@/components/theme/TRouterLink";
 import { TText } from "@/components/theme/TText";
@@ -9,7 +9,7 @@ import { StyleSheet } from "react-native";
 export function SignInPage() {
   const { handleAuthAction } = useAuthAction();
 
-  const handleSignIn = useCallback((email: string, password: string) => {
+  const handleSignIn = useCallback(({ email, password }: { email: string; password: string }) => {
     handleAuthAction(() => signIn(email, password));
   }, [handleAuthAction]);
 

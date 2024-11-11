@@ -1,8 +1,9 @@
 {
   "project_info": {
     "project_number": "650705009399",
+    "firebase_url": "https://friendly-react-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "friendly-react",
-    "storage_bucket": "friendly-react.appspot.com"
+    "storage_bucket": "friendly-react.firebasestorage.app"
   },
   "client": [
     {

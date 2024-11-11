@@ -84,7 +84,7 @@ export const TTextInput = forwardRef<TextInput, TTextInputProps>(({
         autoCapitalize={autoCapitalize}
         ref={interRef}
         {...rest}
-        secureTextEntry={!passwordVisible}
+        secureTextEntry={rest.secureTextEntry && !passwordVisible}
         keyboardType={
           (rest.secureTextEntry && passwordVisible)
             ? "visible-password"
