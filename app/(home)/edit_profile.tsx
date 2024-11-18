@@ -4,6 +4,8 @@ import { TText } from "@/components/theme/TText";
 import { TView } from "@/components/theme/TView";
 import styles from '@/constants/ProfileStyles'
 import UserProfileButton from '@/components/own_profile/Button'
+import TTextInput from "@/components/theme/TTextInput"
+import { friends } from "@/components/own_profile/UserModel"
 
 
 export default function OwnProfileView() {
@@ -11,14 +13,10 @@ export default function OwnProfileView() {
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
 
-  const [userName, setUserName] = useState('Arya Stark');
-  const [userDescription, setUserDescription] = useState(
-    `I am a fictional character in American author George R. R. Martin's\
- A Song of Ice and Fire epic fantasy novel series and its HBO television adaptation Game of Thrones.\
- I am tomboyish, headstrong, feisty, independent, disdain traditional female pursuits.`
-  );
-
-  const [imageUri, setImageUri] = useState('https://fwcdn.pl/fcp/68/48/476848/12529.1.jpg');
+  const user_profile = friends[0]
+  const [userName, setUserName] = useState(user_profile.username);
+  const [userDescription, setUserDescription] = useState(user_profile.description);
+  const [imageUri, setImageUri] = useState(user_profile.photo);
 
   const saveChanges = (field: any) => {
     if (field === 'photo') setIsEditingPhoto(false);
@@ -33,11 +31,12 @@ export default function OwnProfileView() {
         {/* TODO: editing photo url needs to be replaced with uploading photo from gallery*/}
         <TView style={inputStyles.editableColumn}>
           {isEditingPhoto ? (
-            <TextInput
+            <TTextInput
               value={imageUri}
               onChangeText={setImageUri}
               style={inputStyles.input}
               placeholder="Enter image URL"
+              multiline
             />
           ) : (
             <Image source={{ uri: imageUri }} style={styles.image} />
@@ -50,11 +49,12 @@ export default function OwnProfileView() {
 
         <TView style={inputStyles.editableColumn}>
           {isEditingName ? (
-            <TextInput
+            <TTextInput
               value={userName}
               onChangeText={setUserName}
-              style={[inputStyles.input, styles.userName, inputStyles.usernameInput]}
+              style={[inputStyles.usernameInput]}
               placeholder="Enter user name"
+              multiline //TODO: is there a better way to show as text, not as password?
             />
           ) : (
             <TText  type="title">{userName}</TText>
@@ -67,10 +67,10 @@ export default function OwnProfileView() {
 
         <TView style={inputStyles.editableColumn}>
           {isEditingDescription ? (
-            <TextInput
+            <TTextInput
               value={userDescription}
               onChangeText={setUserDescription}
-              style={[inputStyles.input, styles.userDescription]}
+              style={[inputStyles.input]}
               placeholder="Enter description"
               multiline
             />
@@ -100,13 +100,17 @@ const inputStyles = StyleSheet.create({
   },
 
   input: {
-    borderBottomWidth: 1, 
     fontSize: 16,
     lineHeight: 24,
+    height: 'auto',
   },
 
   usernameInput: {
+    height: 'auto',
     textAlign: 'center', 
+    fontSize: 32,
+    marginBottom: 6,
+    fontWeight: 'bold',
   },
 
 });
