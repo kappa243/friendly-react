@@ -23,9 +23,10 @@ const styles = StyleSheet.create({
     },
 
     image: {
-      width: 180,
-      height: 180,
-      marginBottom: 20,
+      width: 220,
+      height: 220,
+      marginVertical: 10,
+      marginHorizontal: 'auto',
       borderRadius: 12,
       elevation: 3,
     },
