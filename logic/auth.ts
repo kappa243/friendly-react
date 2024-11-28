@@ -1,9 +1,8 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
-import { useCallback, useState } from "react";
-import { Alert, Keyboard } from "react-native";
 import { create } from "zustand";
 import { isStringEmpty } from "./utils";
-import database from "@react-native-firebase/database";
+import { getCurrentUserData, setUserEmail, setUserImage, setUserName } from "./userData";
+import { BaseImage } from "@/constants/BaseImage";
 
 export type UserState = {
   user: FirebaseAuthTypes.User | null;
@@ -23,29 +22,31 @@ export function updateDisplayName(name: string) {
   return auth().currentUser?.updateProfile({ displayName: name });
 }
 
-export function signUp(email: string, password: string, name: string) {
+export async function signUp(email: string, password: string, name: string) {
   if (isStringEmpty(email) || isStringEmpty(password) || isStringEmpty(name)) {
     throw new Error("Name, email and password are required");
   }
 
-  return auth().createUserWithEmailAndPassword(email, password)
-    .then((userCredential) => {
-      return userCredential.user?.updateProfile({ displayName: name });
-    })
-    .then(() => {
-      return database().ref(`users/${auth().currentUser?.uid}`).set({
-        name: name,
-        email: email
-      });
-    });
+  const userCredential = await auth().createUserWithEmailAndPassword(email, password);
+  await userCredential.user?.updateProfile({ displayName: name });
+  setUserName(name);
+  setUserEmail(email);
+  setUserImage(BaseImage);
 }
 
-export function signIn(email: string, password: string) {
+export async function signIn(email: string, password: string) {
   if (isStringEmpty(email) || isStringEmpty(password)) {
     throw new Error("Email and password are required");
   }
 
-  return auth().signInWithEmailAndPassword(email, password);
+  await auth().signInWithEmailAndPassword(email, password);
+  getCurrentUserData().then((userData) => {
+    if (!userData) {
+      setUserEmail(email);
+      setUserName(auth().currentUser?.displayName || "");
+      setUserImage(BaseImage);
+    }
+  });
 }
 
 export function signOut() {
@@ -57,24 +58,24 @@ export function subscribeAuthState(callback: (user: FirebaseAuthTypes.User | nul
 }
 
 
-export function useAuthAction() {
-  const [loading, setLoading] = useState(false);
+// export function useAuthAction() {
+//   const [loading, setLoading] = useState(false);
 
-  const handleAuthAction = useCallback(async (action: () => Promise<unknown>) => {
-    if (loading) return;
+//   const handleAuthAction = useCallback(async (action: () => Promise<unknown>) => {
+//     if (loading) return;
 
-    setLoading(true);
-    Keyboard.dismiss(); // removes autofill overlays
+//     setLoading(true);
+//     Keyboard.dismiss(); // removes autofill overlays
 
-    try {
-      await action();
-    } catch (error) {
-      const err = error as Error;
-      Alert.alert("Error", err.message);
-    } finally {
-      setLoading(false);
-    }
-  }, [loading]);
+//     try {
+//       await action();
+//     } catch (error) {
+//       const err = error as Error;
+//       Alert.alert("Error", err.message);
+//     } finally {
+//       setLoading(false);
+//     }
+//   }, [loading]);
 
-  return { loading, handleAuthAction } as const;
-}
+//   return { loading, handleAuthAction } as const;
+// }

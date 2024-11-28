@@ -1,6 +1,6 @@
 import { StyleSheet, Text, type TextProps } from "react-native";
 
-import { useThemeColor } from "@/logic/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 
 export type TTextProps = TextProps & {
   tint?: boolean;

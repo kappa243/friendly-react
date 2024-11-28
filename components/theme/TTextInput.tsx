@@ -1,6 +1,6 @@
-import { useThemeColor } from "@/logic/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
+import { forwardRef, useEffect, useImperativeHandle, useRef, useState } from "react";
 import { Keyboard, Pressable, StyleSheet, TextInput, TextInputProps, View } from "react-native";
 import Animated, { interpolateColor, useAnimatedStyle, useSharedValue, withTiming } from "react-native-reanimated";
 
@@ -18,7 +18,7 @@ export const TTextInput = forwardRef<TextInput, TTextInputProps>(({
   darkColor,
   autoCapitalize = "none",
   ...rest
-}, outerRef) => {
+}: TTextInputProps, outerRef) => {
 
   const [passwordVisible, setPasswordVisible] = useState(false);
 
