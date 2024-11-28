@@ -4,24 +4,28 @@ import { getDatabase } from "@/logic/database";
 
 const db = getDatabase();
 
-function setUserData(user: FirebaseAuthTypes.User | null, data: Record<string, unknown>) {
-  return db.ref("/users/" + user?.uid).update(data);
+function getUserRef(user: FirebaseAuthTypes.User | null = auth().currentUser) {
+  return db.ref("/users/" + user?.uid);
+}
+
+function setUserData(data: Record<string, unknown>) {
+  return getUserRef().update(data);
 }
 
 export function setUserName(name: string) {
-  return setUserData(auth().currentUser, { name: name });
+  return setUserData({ name: name });
 }
 
 export function setUserEmail(email: string) {
-  return setUserData(auth().currentUser, { email: email });
+  return setUserData({ email: email });
 }
 
 export function setUserImage(image: string) {
-  return setUserData(auth().currentUser, { image: image });
+  return setUserData({ image: image });
 }
 
 export function setUserBlurImage(blurImage: string) {
-  return setUserData(auth().currentUser, { blurImage: blurImage });
+  return setUserData({ blurImage: blurImage });
 }
 
 export type UserData = {
@@ -29,12 +33,8 @@ export type UserData = {
   email: string;
 }
 
-// export function getUserData(user: FirebaseAuthTypes.User | null) {
-//   return db.ref("users/" + user?.uid)
-// }
-
 export async function getCurrentUserData(): Promise<UserData | null> {
-  const snapshot = await db.ref("/users/" + auth().currentUser?.uid).once("value");
+  const snapshot = await getUserRef().once("value");
   return snapshot.val();
 }
 
@@ -42,7 +42,7 @@ export function useUserData() {
   const [userData, setUserData] = useState<UserData | null>(null);
 
   useEffect(() => {
-    const ref = db.ref("/users/" + auth().currentUser?.uid);
+    const ref = getUserRef();
     const onDataChange = ref.on("value", (snapshot) => {
       setUserData(snapshot.val());
     });
@@ -53,23 +53,21 @@ export function useUserData() {
   return userData;
 }
 
-
 export async function getUserImage(user: FirebaseAuthTypes.User | null) {
-  const snapshot = await db.ref("users/" + user?.uid).once("value");
-  return snapshot.val().image;
+  const snapshot = await getUserRef(user).child("image").once("value");
+  return snapshot.val();
 }
 
 export async function getUserBlurImage(user: FirebaseAuthTypes.User | null) {
-  const snapshot = await db.ref("users/" + user?.uid).once("value");
-  return snapshot.val().blurImage;
+  const snapshot = await getUserRef(user).child("blurImage").once("value");
+  return snapshot.val();
 }
-
 
 export function useUserImage(): string {
   const [image, setImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const refImage = db.ref("/users/" + auth().currentUser?.uid + "/image");
+    const refImage = getUserRef().child("image");
     const onImageChange = refImage.on("value", (snapshot) => {
       setImage(snapshot.val());
     });
@@ -84,7 +82,7 @@ export function useUserBlurImage(): string {
   const [blurImage, setBlurImage] = useState<string | null>("");
 
   useEffect(() => {
-    const refBlurImage = db.ref("/users/" + auth().currentUser?.uid + "/blurImage");
+    const refBlurImage = getUserRef().child("blurImage");
     const onBlurImageChange = refBlurImage.on("value", (snapshot) => {
       setBlurImage(snapshot.val());
     });
