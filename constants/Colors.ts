@@ -10,7 +10,7 @@ const tintColorDark = "#11bef5";
 export const Colors = {
   light: {
     text: "#11181C",
-    background: "#fff",
+    background: "#fafafa",
     buttonText: "#fff",
     buttonBackground: tintColorLight,
     placeholderText: "#687076",

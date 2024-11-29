@@ -1,12 +1,13 @@
 import TRouterLink from "@/components/theme/TRouterLink";
 import { TText } from "@/components/theme/TText";
 import { TView } from "@/components/theme/TView";
-import { useUserStore } from "@/logic/auth";
+import { useUserData } from "@/logic/userData";
 import { Href } from "expo-router";
+import { ActivityIndicator } from "react-native";
 
 export default function Index() {
 
-  const { user } = useUserStore();
+  const userData = useUserData();
 
   return (
     <TView
@@ -16,9 +17,13 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      <TText>Welcome back <TText style={{ color: "red", fontWeight: "bold" }}>{user?.email}</TText>!</TText>
-      <TRouterLink href={"/(home)/test" as Href<string>}>Settings</TRouterLink>
-      <TRouterLink href={"/(home)/profile" as Href<string>}>User profile</TRouterLink>
+      {!userData ? <ActivityIndicator size="large" /> :
+        <>
+          <TText>Welcome back <TText style={{ color: "red", fontWeight: "bold" }}>{userData.name}</TText>!</TText>
+          <TRouterLink href={"/(home)/test" as Href<string>}>Settings</TRouterLink>
+          <TRouterLink href={"/(home)/profile" as Href<string>}>User profile</TRouterLink>
+        </>
+      }
     </TView>
   );
 }

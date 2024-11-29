@@ -1,5 +1,5 @@
 import { subscribeAuthState, useUserStore } from "@/logic/auth";
-import { useThemeColor } from "@/logic/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
 import { Slot, SplashScreen, Stack, useRootNavigationState, useRouter, useSegments } from "expo-router";

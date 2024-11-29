@@ -1,17 +1,18 @@
-import AuthForm from "@/components/auth/Form";
+import AuthForm from "@/components/auth/AuthForm";
 import KeyboardDismissView from "@/components/auth/KeyboardDismissView";
 import TRouterLink from "@/components/theme/TRouterLink";
 import { TText } from "@/components/theme/TText";
-import { signIn, useAuthAction } from "@/logic/auth";
+import { useLockingFunction } from "@/hooks/useLockingHandle";
+import { signIn } from "@/logic/auth";
 import { useCallback } from "react";
 import { StyleSheet } from "react-native";
 
 export function SignInPage() {
-  const { handleAuthAction } = useAuthAction();
+  const { action } = useLockingFunction();
 
-  const handleSignIn = useCallback((email: string, password: string) => {
-    handleAuthAction(() => signIn(email, password));
-  }, [handleAuthAction]);
+  const handleSignIn = useCallback(({ email, password }: { email: string; password: string }) => {
+    action(() => signIn(email, password));
+  }, [action]);
 
 
   return (

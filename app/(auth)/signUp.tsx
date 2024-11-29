@@ -1,18 +1,19 @@
-import AuthForm from "@/components/auth/Form";
+import AuthForm, { AuthProps } from "@/components/auth/AuthForm";
 import KeyboardDismissView from "@/components/auth/KeyboardDismissView";
-import { signUp, useAuthAction } from "@/logic/auth";
+import { useLockingFunction } from "@/hooks/useLockingHandle";
+import { signUp } from "@/logic/auth";
 import { useCallback } from "react";
 
 export function SignUpPage() {
-  const { handleAuthAction } = useAuthAction();
+  const { action } = useLockingFunction();
 
-  const handleSignUp = useCallback((email: string, password: string) => {
-    handleAuthAction(() => signUp(email, password));
-  }, [handleAuthAction]);
+  const handleSignUp = useCallback(({ email, password, name }: AuthProps) => {
+    action(() => signUp(email, password, name));
+  }, [action]);
 
   return (
     <KeyboardDismissView>
-      <AuthForm title="Sign Up" onSubmit={handleSignUp} />
+      <AuthForm title="Sign Up" nameEnabled onSubmit={handleSignUp} />
     </KeyboardDismissView>
   );
 }

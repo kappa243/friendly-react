@@ -1,7 +1,7 @@
 import { HelloWave } from "@/components/HelloWave";
 import { TabBarIcon } from "@/components/navigation/TabBarIcon";
 import { TText } from "@/components/theme/TText";
-import { useThemeColor } from "@/logic/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { Tabs } from "expo-router";
 import { View } from "react-native";
 
@@ -26,7 +26,7 @@ export default function Home() {
       }}
       backBehavior="initialRoute"
     >
-      <Tabs.Screen name="test" options={{
+      <Tabs.Screen name="settings" options={{
         title: "Settings",
         tabBarIcon: (({ focused, color }) => (
           <TabBarIcon name={focused ? "settings" : "settings-outline"} color={color} />
