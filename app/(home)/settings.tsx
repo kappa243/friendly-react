@@ -29,7 +29,7 @@ export default function Settings() {
       });
 
       if (!res.canceled) {
-        convertImageAsset(res.assets[0]).then((imageData) => {
+        convertImageAsset(res.assets[0].uri).then((imageData) => {
           setUserImage(imageData.image);
           setUserBlurImage(imageData.blurImage);
         });

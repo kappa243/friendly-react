@@ -1,6 +1,7 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { useEffect, useState } from "react";
 import { getDatabase } from "@/logic/database";
+import { BaseBlurImage, BaseImage } from "@/constants/BaseImage";
 
 const db = getDatabase();
 
@@ -69,6 +70,11 @@ export function useUserImage(): string {
   useEffect(() => {
     const refImage = getUserRef().child("image");
     const onImageChange = refImage.on("value", (snapshot) => {
+      if (snapshot.val() === null) {
+        setImage(BaseImage);
+        return;
+      }
+
       setImage(snapshot.val());
     });
 
@@ -84,6 +90,11 @@ export function useUserBlurImage(): string {
   useEffect(() => {
     const refBlurImage = getUserRef().child("blurImage");
     const onBlurImageChange = refBlurImage.on("value", (snapshot) => {
+      if (snapshot.val() === null) {
+        setBlurImage(BaseBlurImage);
+        return;
+      }
+
       setBlurImage(snapshot.val());
     });
 

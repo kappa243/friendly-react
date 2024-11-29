@@ -29,9 +29,9 @@ export async function signUp(email: string, password: string, name: string) {
 
   const userCredential = await auth().createUserWithEmailAndPassword(email, password);
   await userCredential.user?.updateProfile({ displayName: name });
+
   setUserName(name);
   setUserEmail(email);
-  setUserImage(BaseImage);
 }
 
 export async function signIn(email: string, password: string) {
@@ -56,26 +56,3 @@ export function signOut() {
 export function subscribeAuthState(callback: (user: FirebaseAuthTypes.User | null) => void) {
   return auth().onAuthStateChanged(callback);
 }
-
-
-// export function useAuthAction() {
-//   const [loading, setLoading] = useState(false);
-
-//   const handleAuthAction = useCallback(async (action: () => Promise<unknown>) => {
-//     if (loading) return;
-
-//     setLoading(true);
-//     Keyboard.dismiss(); // removes autofill overlays
-
-//     try {
-//       await action();
-//     } catch (error) {
-//       const err = error as Error;
-//       Alert.alert("Error", err.message);
-//     } finally {
-//       setLoading(false);
-//     }
-//   }, [loading]);
-
-//   return { loading, handleAuthAction } as const;
-// }

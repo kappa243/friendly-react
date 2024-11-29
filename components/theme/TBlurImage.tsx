@@ -64,7 +64,7 @@ export function TBlurImage({
 
 
   return (
-    <AnimatedTView style={[{ width, height, overflow: "hidden" }, { borderRadius }, containerStyle]}>
+    <AnimatedTView style={[imageDimensions, { overflow: "hidden" }, { borderRadius }, containerStyle]}>
 
       <AnimatedTView style={blurOpacity}>
         <AnimatedBlurhash
