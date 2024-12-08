@@ -1,8 +1,7 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
 import { create } from "zustand";
 import { isStringEmpty } from "./utils";
-import { getCurrentUserData, setUserEmail, setUserImage, setUserName } from "./userData";
-import { BaseImage } from "@/constants/BaseImage";
+import { setUserEmail, setUserName } from "./userData";
 
 export type UserState = {
   user: FirebaseAuthTypes.User | null;
@@ -40,13 +39,6 @@ export async function signIn(email: string, password: string) {
   }
 
   await auth().signInWithEmailAndPassword(email, password);
-  getCurrentUserData().then((userData) => {
-    if (!userData) {
-      setUserEmail(email);
-      setUserName(auth().currentUser?.displayName || "");
-      setUserImage(BaseImage);
-    }
-  });
 }
 
 export function signOut() {
