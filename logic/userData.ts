@@ -2,16 +2,16 @@ import auth from "@react-native-firebase/auth";
 import { useEffect, useMemo, useState } from "react";
 import { getDatabase } from "@/logic/database";
 import { BaseBlurImage, BaseImage } from "@/constants/BaseImage";
-
-type UserID = string;
+import { UserID } from "./auth";
 
 const db = getDatabase();
 
-function getUserRef(uid: UserID = auth().currentUser!.uid) {
+// usually used after user is logged in
+export function getUserRef(uid: UserID = auth().currentUser!.uid) {
   return db.ref("/users/" + uid);
 }
 
-function useUserRef(uid?: string) {
+export function useUserRef(uid?: string) {
   return useMemo(() => {
     if (!uid) return getUserRef();
     return getUserRef(uid);
@@ -39,6 +39,7 @@ export function setUserBlurImage(blurImage: string) {
 }
 
 export type UserData = {
+  uid: UserID;
   name: string;
   email: string;
 }
@@ -47,7 +48,12 @@ export async function getUserData(uid?: UserID): Promise<UserData | null> {
   const ref = getUserRef(uid);
 
   const snapshot = await ref.once("value");
-  return snapshot.val();
+  const res = snapshot.val();
+
+  if (res)
+    res.uid = snapshot.key!;
+
+  return res;
 }
 
 export function useUserData(uid?: UserID) {
@@ -56,7 +62,12 @@ export function useUserData(uid?: UserID) {
 
   useEffect(() => {
     const onDataChange = ref.on("value", (snapshot) => {
-      setUserData(snapshot.val());
+      const res = snapshot.val();
+
+      if (res)
+        res.uid = snapshot.key!;
+
+      setUserData(res);
     });
 
     return () => ref.off("value", onDataChange);
