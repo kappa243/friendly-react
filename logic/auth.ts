@@ -11,6 +11,8 @@ export type UserAction = {
   setUser: (user: UserState["user"]) => void;
 }
 
+export type UserID = string;
+
 export const useUserStore = create<UserState & UserAction>((set) => ({
   user: auth().currentUser,
   setUser: (user: UserState["user"]) => set(() => ({ user: user }))
