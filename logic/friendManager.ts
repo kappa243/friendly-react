@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { UserID, useUserStore } from "./auth";
+import { getUser, UserID, useUserStore } from "@/logic/userStore";
 import { getDBRef, useDBRef } from "./database";
 
 const friends_path = "/friends";
@@ -57,7 +57,7 @@ export function useUserList(): string[] | null {
 
 export function addFriend(uid: UserID) {
   const friends_ref = getDBRef(friends_path);
-  const curr_uid = useUserStore.getState().user?.uid;
+  const curr_uid = getUser().uid;
 
   return new Promise((resolve, reject) => {
     if (!curr_uid) {
@@ -72,7 +72,7 @@ export function addFriend(uid: UserID) {
 
 export function removeFriend(uid: UserID) {
   const friends_ref = getDBRef(friends_path);
-  const curr_uid = useUserStore.getState().user?.uid;
+  const curr_uid = getUser().uid;
 
   return new Promise((resolve, reject) => {
     if (!curr_uid) {

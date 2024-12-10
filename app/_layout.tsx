@@ -1,4 +1,4 @@
-import { subscribeAuthState, useUserStore } from "@/logic/auth";
+import { subscribeAuthState } from "@/logic/auth";
 import { useThemeColor } from "@/hooks/useThemeColor";
 import { DarkTheme, DefaultTheme, ThemeProvider } from "@react-navigation/native";
 import { useFonts } from "expo-font";
@@ -6,6 +6,7 @@ import { Slot, SplashScreen, Stack, useRootNavigationState, useRouter, useSegmen
 import * as SystemUI from "expo-system-ui";
 import { useEffect, useState } from "react";
 import { useColorScheme } from "react-native";
+import { useUserStore } from "@/logic/userStore";
 
 // Prevent the splash screen from auto-hiding before asset loading is complete.
 SplashScreen.preventAutoHideAsync();
