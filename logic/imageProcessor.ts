@@ -1,4 +1,3 @@
-
 import { manipulateAsync, SaveFormat } from "expo-image-manipulator";
 import { Blurhash } from "react-native-blurhash";
 

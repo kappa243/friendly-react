@@ -20,7 +20,7 @@ export default function Index() {
       {!userData ? <ActivityIndicator size="large" /> :
         <>
           <TText>Welcome back <TText style={{ color: "red", fontWeight: "bold" }}>{userData.name}</TText>!</TText>
-          <TRouterLink href={"/(home)/test" as Href<string>}>Settings</TRouterLink>
+          <TRouterLink href={"/(home)/settings" as Href<string>}>Settings</TRouterLink>
           <TRouterLink href={"/(home)/profile" as Href<string>}>User profile</TRouterLink>
         </>
       }
