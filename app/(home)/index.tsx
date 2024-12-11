@@ -22,6 +22,7 @@ export default function Index() {
           <TText>Welcome back <TText style={{ color: "red", fontWeight: "bold" }}>{userData.name}</TText>!</TText>
           <TRouterLink href={"/(home)/settings" as Href<string>}>Settings</TRouterLink>
           <TRouterLink href={"/(home)/profile" as Href<string>}>User profile</TRouterLink>
+          <TRouterLink href={"/(users)/all_users/index" as Href<string>}>Users</TRouterLink>
         </>
       }
     </TView>
