@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/logic/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { Pressable, PressableProps, StyleProp, StyleSheet, TextStyle } from "react-native";
 import { TText } from "./TText";
 

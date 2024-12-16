@@ -1,4 +1,4 @@
-import { useThemeColor } from "@/logic/useThemeColor";
+import { useThemeColor } from "@/hooks/useThemeColor";
 import { StyleProp, TextStyle } from "react-native";
 import { Link, LinkProps } from "expo-router";
 

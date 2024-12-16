@@ -3,21 +3,30 @@ import { TTextInput } from "../theme/TTextInput";
 import TButton from "../theme/TButton";
 import { StyleSheet, View } from "react-native";
 
+export type AuthProps = {
+  email: string;
+  password: string;
+  name: string;
+}
+
 export type AuthFormProps = {
   title: string;
-  onSubmit: (email: string, password: string) => void;
+  nameEnabled?: boolean;
+  onSubmit: (props: AuthProps) => void;
 };
 
-export function AuthForm({ title, onSubmit }: AuthFormProps) {
+export function AuthForm({ title, nameEnabled = false, onSubmit }: AuthFormProps) {
   const [email, setEmail] = useState("user@example.com");
   const [password, setPassword] = useState("user123");
+  const [name, setName] = useState("User");
 
   const handleSubmit = useCallback(() => {
-    onSubmit(email, password);
-  }, [email, password, onSubmit]);
+    onSubmit({ email, password, name });
+  }, [email, password, name, onSubmit]);
 
   return (
-    <View >
+    <View>
+      {nameEnabled && <TTextInput value={name} onChangeText={setName} placeholder="Name" keyboardType="ascii-capable" />}
       <TTextInput value={email} onChangeText={setEmail} placeholder="Email" keyboardType="email-address" />
       <TTextInput value={password} onChangeText={setPassword} placeholder="Password" secureTextEntry />
       <TButton style={styles.button} title={title} onPress={handleSubmit} />

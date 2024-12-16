@@ -35,7 +35,7 @@ module.exports = {
     "react/jsx-uses-react": "off",
     "react/no-unescaped-entities": 0,
     "indent": ["error", 2, { SwitchCase: 1 }],
-    "linebreak-style": ["error", "unix"],
+    // "linebreak-style": ["error", "unix"],
     "quotes": ["error", "double"],
     "semi": ["error", "always"]
   }
