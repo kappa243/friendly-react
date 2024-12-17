@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useCallback, useEffect, useState } from "react";
 import { TextInput, Image, StyleSheet } from 'react-native';
 import { TText } from "@/components/theme/TText";
 import { TView } from "@/components/theme/TView";
@@ -7,85 +7,186 @@ import UserProfileButton from '@/components/own_profile/Button'
 import TTextInput from "@/components/theme/TTextInput"
 import { friends } from "@/components/own_profile/UserModel"
 import ParallaxScrollView from '@/components/ParallaxScrollView';
+import { getUserData, setUserBlurImage, setUserImage, useUserData, useUserBlurImage, useUserImage, setUserName, setUserDescription, setUserEmail } from "@/logic/userData";
+import TBlurImage from "@/components/theme/TBlurImage";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import TButton from "@/components/theme/TButton";
+import { useLockingFunction } from "@/hooks/useLockingHandle";
+import { signOut } from "@/logic/auth";
+import { addFriend, removeFriend, useFriendList, useUserList } from "@/logic/friendManager";
+import { convertImageAsset } from "@/logic/imageProcessor";
+import * as ImagePicker from "expo-image-picker";
+import { ActivityIndicator, ScrollView } from "react-native";
 
 
 export default function OwnProfileView() {
-  const [isEditingPhoto, setIsEditingPhoto] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [isEditingDescription, setIsEditingDescription] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
 
-  const user_profile = friends[0]
-  const [userName, setUserName] = useState(user_profile.username);
-  const [userDescription, setUserDescription] = useState(user_profile.description);
-  const [imageUri, setImageUri] = useState(user_profile.photo);
+  const userData = useUserData();
+  
+  const [inputUserName, setInputUserName] = useState("");
+  const [inputUserDescription, setInputUserDescription] = useState("");
+  const [inputUserEmail, setInputUserEmail] = useState("");
 
-  const saveChanges = (field: any) => {
-    if (field === 'photo') setIsEditingPhoto(false);
-    if (field === 'name') setIsEditingName(false);
-    if (field === 'description') setIsEditingDescription(false);
+  const image = useUserImage();
+  const blurImage = useUserBlurImage();
+  const { action, loading } = useLockingFunction();
+
+  useEffect(() => {
+    if (userData?.name) {
+      setInputUserName(userData.name);
+    }
+    if (userData?.description) {
+      setInputUserDescription(userData.description);
+    }
+    if (userData?.email) {
+      setInputUserEmail(userData.email);
+    }
+  }, [userData]);
+
+  const handleSetImage = useCallback(() => {
+    action(async () => {
+      const res = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        base64: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      if (!res.canceled) {
+        convertImageAsset(res.assets[0].uri).then((imageData) => {
+          setUserImage(imageData.image);
+          setUserBlurImage(imageData.blurImage);
+        });
+      }
+    });
+  }, [action]);
+
+
+  const handleSaveName = async () => {
+    try {
+      if (inputUserName == userData?.name){
+        alert("Name remain unchanged");
+      } 
+      else{
+        await setUserName(inputUserName);
+        alert("Name updated successfully");
+      }
+      setIsEditingName(false);
+    } catch (error) {
+      alert("Failed to update name");
+    }
   };
+
+  const handleSaveDescription = async () => {
+    try {
+      if (inputUserDescription == userData?.description){
+        alert("Description remain unchanged");
+      } 
+      else{
+        await setUserDescription(inputUserDescription);
+        alert("Description updated successfully");
+      }
+      setIsEditingDescription(false);
+    } catch (error) {
+      alert("Failed to update description");
+    }
+  };
+
+  const handleSaveEmail = async () => {
+    try {
+      if (inputUserEmail == userData?.email){
+        alert("Email remain unchanged");
+      } 
+      else{
+        await setUserEmail(inputUserEmail);
+        alert("Email updated successfully");
+      }
+      setIsEditingEmail(false);
+    } catch (error) {
+      alert("Failed to update email");
+    }
+  };
+  
 
   return (
     <ParallaxScrollView 
       headerImage={
-        <Image
-          source={{ uri: imageUri }}
-          style={styles.image}
-          resizeMode="cover"
-        />
+        <TView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
+          <TBlurImage
+            source={image ? { uri: image } : undefined} // undefined is used to prevent the image from being displayed until it is loaded
+            width={224}
+            height={224}
+            borderRadius={12}
+            blurhash={blurImage} // currecntly only blurhash change forces the image to reload
+            containerStyle={{ margin: 10, elevation: 6 }} //, borderColor: tintColor, borderWidth: 2 }}
+          />
+        </TView>
       }
       headerBackgroundColor={{ light: "#ffffff", dark: "#333333" }}
     >
-      {/* TODO: editing photo url needs to be replaced with uploading photo from gallery*/}
       <TView style={inputStyles.editableColumn}>
-        {isEditingPhoto ? (
-          <TTextInput
-            value={imageUri}
-            onChangeText={setImageUri}
-            style={inputStyles.input}
-            placeholder="Enter image URL"
-            multiline
-          />
-        ):null}
         <UserProfileButton 
-          title={isEditingPhoto ? 'Save' : 'Change photo'}
-          onPress={() => (isEditingPhoto ? saveChanges('photo') : setIsEditingPhoto(true))}
+          title='Change photo'
+          onPress={() => !loading && handleSetImage()}
         />
+        
       </TView>
 
       <TView style={inputStyles.editableColumn}>
         {isEditingName ? (
           <TTextInput
-            value={userName}
-            onChangeText={setUserName}
+            value={inputUserName}
+            onChangeText={setInputUserName}
             style={[inputStyles.usernameInput]}
             placeholder="Enter user name"
-            multiline //TODO: is there a better way to show as text, not as password?
+            multiline // is there a better way to show as text, not as password?
           />
         ) : (
-          <TText  type="title">{userName}</TText>
+          <TText style={{ margin: 10 }} type="title">{inputUserName}</TText>
         )}
         <UserProfileButton 
           title={isEditingName ? 'Save' : 'Change name'}
-          onPress={() => (isEditingName ? saveChanges('name') : setIsEditingName(true))}
+          onPress={() => (isEditingName ? handleSaveName() : setIsEditingName(true))}
         />
       </TView>
 
       <TView style={inputStyles.editableColumn}>
         {isEditingDescription ? (
           <TTextInput
-            value={userDescription}
-            onChangeText={setUserDescription}
+            value={inputUserDescription}
+            onChangeText={setInputUserDescription}
             style={[inputStyles.input]}
             placeholder="Enter description"
             multiline
           />
         ) : (
-          <TText>{userDescription}</TText>
+          <TText>{inputUserDescription}</TText>
         )}
         <UserProfileButton 
           title={isEditingDescription ? 'Save' : 'Change description'}
-          onPress={() => (isEditingDescription ? saveChanges('description') : setIsEditingDescription(true))}
+          onPress={() => (isEditingDescription ? handleSaveDescription() : setIsEditingDescription(true))}
+        />
+      </TView>
+
+      <TView style={inputStyles.editableColumn}>
+        {isEditingEmail ? (
+          <TTextInput
+            value={inputUserEmail}
+            onChangeText={setInputUserEmail}
+            style={[inputStyles.input]}
+            placeholder="Enter email"
+            multiline
+          />
+        ) : (
+          <TText>{inputUserEmail}</TText>
+        )}
+        <UserProfileButton 
+          title={isEditingEmail ? 'Save' : 'Change email'}
+          onPress={() => (isEditingEmail ? handleSaveEmail() : setIsEditingEmail(true))}
         />
       </TView>
 

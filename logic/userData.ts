@@ -34,6 +34,10 @@ export function setUserImage(image: string) {
   return setUserData({ image: image });
 }
 
+export function setUserDescription(description: string) {
+  return setUserData({ description: description });
+}
+
 export function setUserBlurImage(blurImage: string) {
   return setUserData({ blurImage: blurImage });
 }
@@ -42,6 +46,7 @@ export type UserData = {
   uid: UserID;
   name: string;
   email: string;
+  description?: string
 }
 
 export async function getUserData(uid?: UserID): Promise<UserData | null> {
