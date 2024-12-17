@@ -14,7 +14,7 @@ function HomeHeader() {
   );
 }
 
-export function UsersLayout(){
+export default function UsersLayout(){
   const tint = useThemeColor({}, "tint");
     
   return (
