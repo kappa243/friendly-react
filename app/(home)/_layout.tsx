@@ -41,7 +41,7 @@ export default function Home() {
       }} />
       <Tabs.Screen
         name="profile/[id]"
-        initialParams={{ id: "0" }}
+        initialParams={{ id: "" }}
         options={{
           title: "Profile",
           tabBarIcon: ({ focused, color }) => (

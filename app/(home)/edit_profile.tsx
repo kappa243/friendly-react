@@ -1,22 +1,16 @@
 import React, { useCallback, useEffect, useState } from "react";
-import { TextInput, Image, StyleSheet } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { TText } from "@/components/theme/TText";
 import { TView } from "@/components/theme/TView";
-import styles from '@/constants/ProfileStyles'
 import UserProfileButton from '@/components/own_profile/Button'
 import TTextInput from "@/components/theme/TTextInput"
-import { friends } from "@/components/own_profile/UserModel"
 import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { getUserData, setUserBlurImage, setUserImage, useUserData, useUserBlurImage, useUserImage, setUserName, setUserDescription, setUserEmail } from "@/logic/userData";
+import { setUserBlurImage, setUserImage, useUserData, useUserBlurImage, useUserImage, setUserName, setUserDescription, setUserEmail } from "@/logic/userData";
 import TBlurImage from "@/components/theme/TBlurImage";
-import { useThemeColor } from "@/hooks/useThemeColor";
-import TButton from "@/components/theme/TButton";
 import { useLockingFunction } from "@/hooks/useLockingHandle";
-import { signOut } from "@/logic/auth";
-import { addFriend, removeFriend, useFriendList, useUserList } from "@/logic/friendManager";
 import { convertImageAsset } from "@/logic/imageProcessor";
 import * as ImagePicker from "expo-image-picker";
-import { ActivityIndicator, ScrollView } from "react-native";
+import { signOut } from "@/logic/auth";
 
 
 export default function OwnProfileView() {
@@ -189,6 +183,8 @@ export default function OwnProfileView() {
           onPress={() => (isEditingEmail ? handleSaveEmail() : setIsEditingEmail(true))}
         />
       </TView>
+
+      <UserProfileButton title="Sign out" onPress={signOut} />
 
     </ParallaxScrollView>
   );

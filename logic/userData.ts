@@ -46,7 +46,9 @@ export type UserData = {
   uid: UserID;
   name: string;
   email: string;
-  description?: string
+  description?: string;
+  image?: string;
+  blurImage?: string;
 }
 
 export async function getUserData(uid?: UserID): Promise<UserData | null> {
