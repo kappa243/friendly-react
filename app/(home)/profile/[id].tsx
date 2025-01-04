@@ -9,10 +9,11 @@ import { Href } from "expo-router";
 import UserProfileButton from '@/components/own_profile/Button'
 import ParallaxScrollView from "@/components/ParallaxScrollView"
 import TBlurImage from "@/components/theme/TBlurImage";
-import { getUserRef,getUserImage, getUserBlurImage, getUserData, UserData } from "@/logic/userData";
+import { getUserRef, getUserImage, getUserBlurImage, getUserData, UserData } from "@/logic/userData";
 import TButton from "@/components/theme/TButton";
 import { addFriend, removeFriend, useFriendList, useUserList } from "@/logic/friendManager";
-import { BaseImage } from "@/constants/BaseImage";
+import auth from "@react-native-firebase/auth";
+import { BaseImage, BaseBlurImage } from "@/constants/BaseImage";
 
 
 export default function UserView() {
@@ -54,6 +55,12 @@ export default function UserView() {
   
         setImage(userImage);
         setBlurImage(userBlurImage);
+
+        if (userImage === null){
+          setImage(BaseImage);
+          setBlurImage(BaseBlurImage)
+        }
+
       } catch (error) {
         console.error("Error fetching user images:", error);
       }
@@ -63,27 +70,26 @@ export default function UserView() {
   }, [id])
 
   useEffect(() => {
-    const fetchUserData = () => {
+    const fetchUserData = async () => {  
       let userRef;
-  
+    
       if (!id || id === "") {
         userRef = getUserRef();
       } else {
         userRef = getUserRef(id); 
       }
-  
-      const onDataChange = userRef.on("value", (snapshot) => {
+      
+      try {
+        const snapshot = await userRef.once("value");
         setUserData(snapshot.val());
-      });
-  
-      return () => {
-        userRef.off("value", onDataChange);
-      };
+      } catch (error) {
+        console.error("Failed to fetch user data:", error);
+      }
     };
   
     fetchUserData();
   }, [id]);
-
+  
 
   if (!userData) {
     return (
@@ -111,37 +117,60 @@ export default function UserView() {
       <TText type="title">{userData.name}</TText>
       <TText>{userData?.description || ""}</TText>
 
-      <UserProfileButton 
-        title={false ? "Remove from friends" : "Add to friends"}
-        // TODO: recreate this mock to something working
-        onPress={() => {}}
-      />
+      { id !== auth().currentUser!.uid ? (
+        friends && friends.includes(id) ? (
+          <UserProfileButton 
+            title="Remove from friends"
+            onPress={() => removeFriend(id)}
+          />
+        ) : (
+          <UserProfileButton 
+            title="Add to friends"
+            onPress={() => addFriend(id)}
+          />
+        )
+      ) : (
+        <TText>It's your profile!</TText>
+      ) }
 
       <TText type="subtitle">Friends</TText>
       <FlatList
         data={usersData.filter((user) => user.uid !== id)} 
         renderItem={({ item }) => (
-          <TView style={styles.friendBox}>           
-            <TRouterLink href={`/(home)/profile/${item.uid}` as Href<string>}>
+          <TView style={{ flexDirection: 'row', 
+                          justifyContent: 'space-between', 
+                          padding: 6,
+                          width: '100%',
+                          backgroundColor: '#dcecf2',
+                          marginVertical: 6,
+                          borderRadius: 12,
+                          elevation: 3,
+                          alignItems: 'center'}}>           
+            <TRouterLink href={`/(home)/profile/${item.uid}` as Href<string>} style={{ flex: 1, paddingTop: 4 }}>
               <TBlurImage
-                source={item.image ? { uri: item.image } : undefined}
+                source={item.image ? { uri: item.image } : {uri: BaseImage}}
                 width={64}
                 height={64}
                 borderRadius={4}
-                blurhash={item.blurImage || ""}
-                containerStyle={{ margin: 3, elevation: 2 }}
+                blurhash={item.blurImage || BaseBlurImage}
+                containerStyle={{ elevation: 2 }}
               />
-              {item.name || "Unknown User"}
+              <Text style={{ color: 'black', fontSize: 15}}>  {/* No idea how to center this text vertically and add margin*/}
+                {item.name || "Unknown User"}
+              </Text>
+
             </TRouterLink>
             
             {friends && friends.includes(item.uid) ? (
               <TButton
-                title="Remove friend"
+                title={"Remove\n  friend"}
+                style={{minWidth: 80}}
                 onPress={() => removeFriend(item.uid)}
               />
             ) : (
               <TButton
-                title="Add friend"
+                title={" Add\nfriend"}
+                style={{minWidth: 80 }}
                 onPress={() => addFriend(item.uid)}
               />
             )}
