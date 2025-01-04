@@ -117,7 +117,7 @@ export default function UserView() {
       <TText type="title">{userData.name}</TText>
       <TText>{userData?.description || ""}</TText>
 
-      { id !== auth().currentUser!.uid ? (
+      { id && id !== auth().currentUser!.uid ? (
         friends && friends.includes(id) ? (
           <UserProfileButton 
             title="Remove from friends"
@@ -130,7 +130,7 @@ export default function UserView() {
           />
         )
       ) : (
-        <TText>It's your profile!</TText>
+        <TText style={{textAlign: 'center', fontWeight: 'bold', fontSize: 14}}>It's your profile!</TText>
       ) }
 
       <TText type="subtitle">Friends</TText>
