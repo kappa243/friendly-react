@@ -1,10 +1,11 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useCallback, useEffect, useState } from "react";
-import { StyleSheet } from 'react-native';
+import { StyleSheet } from "react-native";
 import { TText } from "@/components/theme/TText";
 import { TView } from "@/components/theme/TView";
-import UserProfileButton from '@/components/own_profile/Button'
-import TTextInput from "@/components/theme/TTextInput"
-import ParallaxScrollView from '@/components/ParallaxScrollView';
+import UserProfileButton from "@/components/own_profile/Button";
+import TTextInput from "@/components/theme/TTextInput";
+import ParallaxScrollView from "@/components/ParallaxScrollView";
 import { setUserBlurImage, setUserImage, useUserData, useUserBlurImage, useUserImage, setUserName, setUserDescription, setUserEmail } from "@/logic/userData";
 import TBlurImage from "@/components/theme/TBlurImage";
 import { useLockingFunction } from "@/hooks/useLockingHandle";
@@ -19,7 +20,7 @@ export default function OwnProfileView() {
   const [isEditingEmail, setIsEditingEmail] = useState(false);
 
   const userData = useUserData();
-  
+
   const [inputUserName, setInputUserName] = useState("");
   const [inputUserDescription, setInputUserDescription] = useState("");
   const [inputUserEmail, setInputUserEmail] = useState("");
@@ -62,10 +63,10 @@ export default function OwnProfileView() {
 
   const handleSaveName = async () => {
     try {
-      if (inputUserName == userData?.name){
+      if (inputUserName === userData?.name) {
         alert("Name remain unchanged");
-      } 
-      else{
+      }
+      else {
         await setUserName(inputUserName);
         alert("Name updated successfully");
       }
@@ -77,10 +78,10 @@ export default function OwnProfileView() {
 
   const handleSaveDescription = async () => {
     try {
-      if (inputUserDescription == userData?.description){
+      if (inputUserDescription === userData?.description) {
         alert("Description remain unchanged");
-      } 
-      else{
+      }
+      else {
         await setUserDescription(inputUserDescription);
         alert("Description updated successfully");
       }
@@ -92,10 +93,10 @@ export default function OwnProfileView() {
 
   const handleSaveEmail = async () => {
     try {
-      if (inputUserEmail == userData?.email){
+      if (inputUserEmail === userData?.email) {
         alert("Email remain unchanged");
-      } 
-      else{
+      }
+      else {
         await setUserEmail(inputUserEmail);
         alert("Email updated successfully");
       }
@@ -104,10 +105,10 @@ export default function OwnProfileView() {
       alert("Failed to update email");
     }
   };
-  
+
 
   return (
-    <ParallaxScrollView 
+    <ParallaxScrollView
       headerImage={
         <TView style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
           <TBlurImage
@@ -123,11 +124,11 @@ export default function OwnProfileView() {
       headerBackgroundColor={{ light: "#ffffff", dark: "#333333" }}
     >
       <TView style={inputStyles.editableColumn}>
-        <UserProfileButton 
+        <UserProfileButton
           title='Change photo'
           onPress={() => !loading && handleSetImage()}
         />
-        
+
       </TView>
 
       <TView style={inputStyles.editableColumn}>
@@ -142,8 +143,8 @@ export default function OwnProfileView() {
         ) : (
           <TText style={{ margin: 10 }} type="title">{inputUserName}</TText>
         )}
-        <UserProfileButton 
-          title={isEditingName ? 'Save' : 'Change name'}
+        <UserProfileButton
+          title={isEditingName ? "Save" : "Change name"}
           onPress={() => (isEditingName ? handleSaveName() : setIsEditingName(true))}
         />
       </TView>
@@ -160,8 +161,8 @@ export default function OwnProfileView() {
         ) : (
           <TText>{inputUserDescription}</TText>
         )}
-        <UserProfileButton 
-          title={isEditingDescription ? 'Save' : 'Change description'}
+        <UserProfileButton
+          title={isEditingDescription ? "Save" : "Change description"}
           onPress={() => (isEditingDescription ? handleSaveDescription() : setIsEditingDescription(true))}
         />
       </TView>
@@ -178,8 +179,8 @@ export default function OwnProfileView() {
         ) : (
           <TText>{inputUserEmail}</TText>
         )}
-        <UserProfileButton 
-          title={isEditingEmail ? 'Save' : 'Change email'}
+        <UserProfileButton
+          title={isEditingEmail ? "Save" : "Change email"}
           onPress={() => (isEditingEmail ? handleSaveEmail() : setIsEditingEmail(true))}
         />
       </TView>
@@ -191,29 +192,29 @@ export default function OwnProfileView() {
 }
 
 const inputStyles = StyleSheet.create({
-  editableColumn: { 
-    flexDirection: 'column',
-    alignItems: 'center', 
+  editableColumn: {
+    flexDirection: "column",
+    alignItems: "center",
   },
 
-  userProfileButton: { 
-    paddingHorizontal: 5, 
-    margin: 2, 
+  userProfileButton: {
+    paddingHorizontal: 5,
+    margin: 2,
   },
 
   input: {
     fontSize: 16,
     lineHeight: 24,
-    height: 'auto',
+    height: "auto",
   },
 
   usernameInput: {
-    height: 'auto',
-    textAlign: 'center', 
+    height: "auto",
+    textAlign: "center",
     fontSize: 32,
     marginBottom: 6,
     padding: 10,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 
 });
