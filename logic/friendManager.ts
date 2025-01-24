@@ -1,65 +1,86 @@
-import auth from "@react-native-firebase/auth";
 import { useEffect, useState } from "react";
-import { getUserRef, useUserRef } from "./userData";
-import { UserID } from "./auth";
-import { getDatabase } from "./database";
+import { getUser, UserID, useUserStore } from "@/logic/userStore";
+import { getDBRef, useDBRef } from "./database";
 
-const db = getDatabase();
+const friends_path = "/friends";
 
 export function useFriendList(): string[] | null {
   const [friends, setFriends] = useState<string[]>([]);
-  const ref = useUserRef();
+  const { user } = useUserStore();
+  const friends_ref = useDBRef(friends_path);
 
   useEffect(() => {
-    const refFriends = ref.child("friends");
-    const onFriendsChange = refFriends.on("value", (snapshot) => {
+    if (!user) {
+      setFriends([]);
+      return;
+    }
+
+    const ref = friends_ref.child(user.uid);
+    const onFriendsChange = ref.on("value", (snapshot) => {
       let res = snapshot.val() ? Object.keys(snapshot.val()) : [];
 
-      // filter out current user
-      const curr_user = auth().currentUser?.uid;
-      if (curr_user)
-        res = res.filter((uid) => uid !== curr_user);
+      res = res.filter((uid) => uid !== user.uid);
 
       setFriends(res);
     });
 
-    return () => refFriends.off("value", onFriendsChange);
-  }, [ref]);
+    return () => ref.off("value", onFriendsChange);
+  }, [friends_ref, user]);
 
   return friends;
 }
 
-const users_ref = db.ref("/users");
-
 export function useUserList(): string[] | null {
   const [users, setUsers] = useState<string[]>([]);
+  const { user } = useUserStore();
+  const users_ref = useDBRef("/users");
 
   useEffect(() => {
+    if (!user) {
+      setUsers([]);
+      return;
+    }
+
     const refUsers = users_ref.on("value", (snapshot) => {
       let res = snapshot.val() ? Object.keys(snapshot.val()) : [];
 
-      // filter out current user
-      const curr_user = auth().currentUser?.uid;
-      if (curr_user)
-        res = res.filter((uid) => uid !== curr_user);
+      res = res.filter((uid) => uid !== user.uid);
 
       setUsers(res);
     });
 
     return () => users_ref.off("value", refUsers);
-  }, []);
+  }, [user, users_ref]);
 
   return users;
 }
 
 export function addFriend(uid: UserID) {
-  const ref = getUserRef();
+  const friends_ref = getDBRef(friends_path);
+  const curr_uid = getUser().uid;
 
-  return ref.child("friends").child(uid).set(true);
+  return new Promise((resolve, reject) => {
+    if (!curr_uid) {
+      return resolve(false);
+    }
+
+    friends_ref.child(curr_uid).child(uid).set(true)
+      .then(() => resolve(true))
+      .catch((error) => reject(error));
+  });
 }
 
 export function removeFriend(uid: UserID) {
-  const ref = getUserRef();
+  const friends_ref = getDBRef(friends_path);
+  const curr_uid = getUser().uid;
 
-  return ref.child("friends").child(uid).remove();
+  return new Promise((resolve, reject) => {
+    if (!curr_uid) {
+      return resolve(false);
+    }
+
+    friends_ref.child(curr_uid).child(uid).remove()
+      .then(() => resolve(true))
+      .catch((error) => reject(error));
+  });
 }
