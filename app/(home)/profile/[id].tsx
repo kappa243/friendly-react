@@ -14,6 +14,7 @@ import TButton from "@/components/theme/TButton";
 import { addFriend, removeFriend, useFriendList, useUserList } from "@/logic/friendManager";
 import auth from "@react-native-firebase/auth";
 import { BaseImage, BaseBlurImage } from "@/constants/BaseImage";
+import Motion from "@/components/user_profile/Motion"
 
 
 export default function UserView() {
@@ -133,6 +134,8 @@ export default function UserView() {
     ) : (
       <TText style={{ textAlign: "center", fontWeight: "bold", fontSize: 14 }}>It's your profile!</TText>
     )}
+
+    <Motion></Motion>
 
     <TText type="subtitle">Friends</TText>
     <FlatList

@@ -6,10 +6,10 @@ export default function Motion() {
     const [data, setData] = useState<DeviceMotionMeasurement | null>(null);
     const [subscription, setSubscription] = useState<any>(null);
     const [rotationHistory, setRotationHistory] = useState<number[]>([]);
-    const historySize = 50;
+    const historySize = 40;
     const samplingInterval = 100
     const rapidChangeThreshold = 0.5;
-    const returnThreshold = 0.2;
+    const returnThreshold = 0.15;
   
     const subscribe = () => {
       setSubscription(
@@ -18,7 +18,6 @@ export default function Motion() {
   
           const currentBeta = deviceMotionData.rotation?.beta ?? 0;
           updateRotationHistory(currentBeta);
-          //doesRotationChangedRapidly();
         })
       );
   
@@ -44,7 +43,6 @@ export default function Motion() {
         if (newHistory.length > historySize) {
           newHistory.shift(); 
         }
-        //console.log(newHistory)
         doesRotationChangedRapidly(newHistory)
         return newHistory;
       });
@@ -67,21 +65,21 @@ export default function Motion() {
       const { first, last, min, max } = getRotationStatistics(historyList);  
       if (Math.abs(first - last) < returnThreshold) {
         if (first - min > rapidChangeThreshold) {
-          alert(`Reject move ${first.toFixed(2)} | ${min.toFixed(2)} | ${last.toFixed(2)}`);
-          setRotationHistory([0])
+          Alert.alert('Reject', `Reject move ${first.toFixed(2)} | ${min.toFixed(2)} | ${last.toFixed(2)}`);
+          setRotationHistory([])
         } else if (max - first > rapidChangeThreshold) {
-          alert(`Accept move ${first.toFixed(2)} | ${max.toFixed(2)} | ${last.toFixed(2)}`);
-          setRotationHistory([0])
+          Alert.alert('Accept', `Accept move ${first.toFixed(2)} | ${max.toFixed(2)} | ${last.toFixed(2)}`);
+          setRotationHistory([])
         }
       }
     };
 
-  const { acceleration } = data || {};
-  const { rotation } = data || {};
+  // const { acceleration } = data || {};
+  // const { rotation } = data || {};
 
   return (
     <View style={styles.container}>
-      <Text style={styles.text}>Acceleration:</Text>
+      {/* <Text style={styles.text}>Acceleration:</Text>
       <Text style={styles.text}>x: {acceleration?.x?.toFixed(2) ?? 'None'}</Text>
       <Text style={styles.text}>y: {acceleration?.y?.toFixed(2) ?? 'None'}</Text>
       <Text style={styles.text}>z: {acceleration?.z?.toFixed(2) ?? 'None'}</Text>
@@ -94,7 +92,7 @@ export default function Motion() {
       <View style={styles.buttonContainer}>
         <Button onPress={subscribe} title="Start" />
         <Button onPress={unsubscribe} title="Stop" />
-      </View>
+      </View> */}
     </View>
   );
 }

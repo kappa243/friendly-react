@@ -56,13 +56,6 @@ export default function Home() {
         ))
       }} />
 
-      {/* <Tabs.Screen name="motion" options={{
-        title: "Motion test",
-        tabBarIcon: (({ focused, color }) => (
-          <TabBarIcon name={focused ? "settings" : "settings-outline"} color={color} />
-        ))
-      }}/> */}
-
     </Tabs>
   );
 }
