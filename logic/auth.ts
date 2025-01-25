@@ -1,22 +1,6 @@
 import auth, { FirebaseAuthTypes } from "@react-native-firebase/auth";
-import { create } from "zustand";
 import { isStringEmpty } from "./utils";
 import { setUserEmail, setUserName } from "./userData";
-
-export type UserState = {
-  user: FirebaseAuthTypes.User | null;
-}
-
-export type UserAction = {
-  setUser: (user: UserState["user"]) => void;
-}
-
-export type UserID = string;
-
-export const useUserStore = create<UserState & UserAction>((set) => ({
-  user: auth().currentUser,
-  setUser: (user: UserState["user"]) => set(() => ({ user: user }))
-}));
 
 
 export function updateDisplayName(name: string) {

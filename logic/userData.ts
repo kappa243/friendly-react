@@ -1,21 +1,25 @@
-import auth from "@react-native-firebase/auth";
-import { useEffect, useMemo, useState } from "react";
-import { getDatabase } from "@/logic/database";
+import { useEffect, useState } from "react";
+import { getDBRef, useDBRef } from "@/logic/database";
 import { BaseBlurImage, BaseImage } from "@/constants/BaseImage";
-import { UserID } from "./auth";
+import { getUser, UserID } from "@/logic/userStore";
 
-const db = getDatabase();
+const users_path = "/users";
 
 // usually used after user is logged in
-export function getUserRef(uid: UserID = auth().currentUser!.uid) {
-  return db.ref("/users/" + uid);
+export function getUserRef(uid?: UserID) {
+  if (!uid) {
+    uid = getUser().uid;
+  }
+
+  return getDBRef(`${users_path}/${uid}`);
 }
 
-export function useUserRef(uid?: string) {
-  return useMemo(() => {
-    if (!uid) return getUserRef();
-    return getUserRef(uid);
-  }, [uid]);
+export function useUserRef(uid?: UserID) {
+  if (!uid) {
+    uid = getUser().uid;
+  }
+
+  return useDBRef(`${users_path}/${uid}`);
 }
 
 function setUserData(data: Record<string, unknown>) {

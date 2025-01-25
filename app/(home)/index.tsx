@@ -4,6 +4,7 @@ import { TView } from "@/components/theme/TView";
 import { useFriendList } from "@/logic/friendManager";
 import { getUserData, UserData, useUserData } from "@/logic/userData";
 import { Href } from "expo-router";
+import React from "react";
 import { useEffect, useState } from "react";
 import { ActivityIndicator } from "react-native";
 
