@@ -55,6 +55,12 @@ export default function Home() {
           <TabBarIcon name={focused ? "person" : "person-outline"} color={color} />
         ))
       }} />
+      <Tabs.Screen name="map" options={{
+        title: "Map",
+        tabBarIcon: (({ focused, color }) => (
+          <TabBarIcon name={focused ? "location" : "location-outline"} color={color} />
+        ))
+      }} />
 
       {/* <Tabs.Screen name="motion" options={{
         title: "Motion test",
