@@ -1,9 +1,12 @@
 import { useEffect, useState } from "react";
 import Animated, { AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { SwipeState } from "./SwipeCore";
-import { StyleProp, ViewStyle } from "react-native";
-import { UserData } from "@/logic/userData";
+import { StyleProp, View, ViewStyle } from "react-native";
+import { UserData, useUserBlurImage, useUserImage } from "@/logic/userData";
 import { TText } from "../theme/TText";
+import TBlurImage from "../theme/TBlurImage";
+import { useThemeColor } from "@/hooks/useThemeColor";
+import { TView } from "../theme/TView";
 
 export default function SwipeCard({
   data,
@@ -19,7 +22,7 @@ export default function SwipeCard({
 
   const translateX = useSharedValue<number>(0.0);
   const [swiped, setSwiped] = useState(false);
-  const [color] = useState(`rgb(${Math.random() * 255},${Math.random() * 255},${Math.random() * 255})`);
+  const [color] = useState([Math.random() * 255, Math.random() * 255, Math.random() * 255]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{
@@ -58,18 +61,42 @@ export default function SwipeCard({
     }
   }, [x, state, translateX, swiped]);
 
+  const blurImage = useUserBlurImage(data.uid);
+  const image = useUserImage(data.uid);
+
+  const tintColor = useThemeColor({}, "tint");
+
   return (
     <Animated.View style={[style, {
       width: "100%",
       height: "100%",
       position: "absolute",
       // random color
-      backgroundColor: color,
+      backgroundColor: `rgb(${color[0]},${color[1]},${color[2]})`,
       flex: 1,
-      justifyContent: "center",
+      justifyContent: "flex-start",
       alignItems: "center",
     }, animatedStyle]}>
-      <TText>{data.name}</TText>
+      <View style={{ height: "60%", width: "100%" }}>
+        <TBlurImage
+          source={image ? { uri: image } : undefined} // undefined is used to prevent the image from being displayed until it is loaded
+          width={"100%"}
+          height={"100%"}
+          style={{ resizeMode: "contain" }}
+          borderRadius={0}
+          blurhash={blurImage} // currecntly only blurhash change forces the image to reload
+          containerStyle={{ width: "100%", height: "100%" }}
+        />
+      </View>
+      <View style={{ height: "40%", width: "100%", justifyContent: "center", alignItems: "center" }}>
+        <TText style={{
+          fontSize: 24,
+          color: `rgb(${255 - color[0]},${255 - color[1]},${255 - color[2]})`,
+        }}>
+          {data.name}
+        </TText>
+      </View>
+
     </Animated.View>
   );
 }
