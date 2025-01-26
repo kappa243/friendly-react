@@ -1,6 +1,6 @@
 import SwipeCore from "@/components/swipe/SwipeCore";
 import { TView } from "@/components/theme/TView";
-import { useFriendList } from "@/logic/friendManager";
+import { useFriendList, useUserList } from "@/logic/friendManager";
 import { getUserData, UserData, useUserData } from "@/logic/userData";
 import React from "react";
 import { useEffect, useState } from "react";
@@ -11,20 +11,28 @@ import { ActivityIndicator } from "react-native";
 export default function Index() {
 
   const userData = useUserData();
+  const users = useUserList();
   const friends = useFriendList();
 
-  const [friendsData, setFriendsData] = useState<UserData[]>([]);
+  const [newUsersData, setNewUsersData] = useState<UserData[] | null>(null);
 
   useEffect(() => {
-    if (!friends) {
-      setFriendsData([]);
+    if (friends === null || users === null) {
       return;
     }
 
-    Promise.all(friends.map((uid) => getUserData(uid))).then((results) => {
-      setFriendsData(results.filter((user) => user !== null) as UserData[]);
+    Promise.all(users.filter((uid) => !friends.includes(uid)).map((uid) => getUserData(uid))).then((results) => {
+      setNewUsersData(results.filter((user) => user !== null) as UserData[]);
     });
-  }, [friends]);
+
+    // Promise.all(friends.map((uid) => getUserData(uid))).then((results) => {
+    //   setFriendsData(results.filter((user) => user !== null) as UserData[]);
+    // });
+  }, [friends, users]);
+
+  useEffect(() => {
+    console.log("New users data:", newUsersData?.length);
+  }, [newUsersData]);
 
   return (
     <TView
@@ -36,7 +44,7 @@ export default function Index() {
         alignItems: "center",
       }}
     >
-      {!userData ? <ActivityIndicator size="large" /> :
+      {!userData || !newUsersData ? <ActivityIndicator size="large" /> :
         <>
           {/* <TText>Welcome back <TText style={{ color: "red", fontWeight: "bold" }}>{userData.name}</TText>!</TText> */}
 
@@ -52,7 +60,7 @@ export default function Index() {
             </TView>
           } */}
 
-          <SwipeCore />
+          <SwipeCore users={newUsersData!} />
         </>
       }
     </TView>

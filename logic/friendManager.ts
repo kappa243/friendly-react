@@ -5,13 +5,12 @@ import { getDBRef, useDBRef } from "./database";
 const friends_path = "/friends";
 
 export function useFriendList(): string[] | null {
-  const [friends, setFriends] = useState<string[]>([]);
+  const [friends, setFriends] = useState<string[] | null>(null);
   const { user } = useUserStore();
   const friends_ref = useDBRef(friends_path);
 
   useEffect(() => {
     if (!user) {
-      setFriends([]);
       return;
     }
 
@@ -31,13 +30,12 @@ export function useFriendList(): string[] | null {
 }
 
 export function useUserList(): string[] | null {
-  const [users, setUsers] = useState<string[]>([]);
+  const [users, setUsers] = useState<string[] | null>(null);
   const { user } = useUserStore();
   const users_ref = useDBRef("/users");
 
   useEffect(() => {
     if (!user) {
-      setUsers([]);
       return;
     }
 

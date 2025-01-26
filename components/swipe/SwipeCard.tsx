@@ -2,12 +2,16 @@ import { useEffect, useState } from "react";
 import Animated, { AnimatedStyle, useAnimatedStyle, useSharedValue, withSpring } from "react-native-reanimated";
 import { SwipeState } from "./SwipeCore";
 import { StyleProp, ViewStyle } from "react-native";
+import { UserData } from "@/logic/userData";
+import { TText } from "../theme/TText";
 
 export default function SwipeCard({
+  data,
   x = 0.0,
   state = "normal",
   style,
 }: {
+  data: UserData;
   x: number;
   state: SwipeState;
   style?: StyleProp<AnimatedStyle<StyleProp<ViewStyle>>>
@@ -61,8 +65,11 @@ export default function SwipeCard({
       position: "absolute",
       // random color
       backgroundColor: color,
+      flex: 1,
+      justifyContent: "center",
+      alignItems: "center",
     }, animatedStyle]}>
-
+      <TText>{data.name}</TText>
     </Animated.View>
   );
 }

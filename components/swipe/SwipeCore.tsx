@@ -3,19 +3,22 @@ import { useCallback, useEffect, useState } from "react";
 import { Subscription } from "expo-modules-core/build/EventEmitter";
 import SwipeCard from "./SwipeCard";
 import { View } from "react-native";
+import { UserData } from "@/logic/userData";
+import { TView } from "../theme/TView";
+import { TText } from "../theme/TText";
 
 const SWAP_Y = 0.85;
 const RESET_Y = 0.1;
 
-
-const CARDS = ["A", "B", "C", "D", "E", "F", "G", "H", "I", "J"];
-
 export type SwipeState = "normal" | "swipe_left" | "swipe_right";
 
-export default function SwipeCore() {
+export default function SwipeCore({
+  users
+}: {
+  users: UserData[];
+}) {
   const [realX, setRealX] = useState(0.0);
 
-  const [cards, setCards] = useState(CARDS);
   const [childX, setChildX] = useState(0.0);
 
   const _subscribe = useCallback(() => {
@@ -78,13 +81,14 @@ export default function SwipeCore() {
   }, [realX, swipeState]);
 
   return (
-    <View style={[{ width: "100%", height: "100%", position: "relative" }]}>
-      {cards.map((card, index) => (
+    <TView style={[{ width: "100%", height: "100%", position: "relative" }]}>
+      {users.map((data, index) => (
         // <TText key={card}>{index === selectedCard ? card : "none"}</TText>
-        <SwipeCard key={index} style={{ zIndex: -index }} x={index === selectedCard ? childX : 0} state={index === selectedCard ? swipeState : "normal"} />
+        <SwipeCard key={index} data={data} style={{ zIndex: -index }} x={index === selectedCard ? childX : 0} state={index === selectedCard ? swipeState : "normal"} />
       ))}
-      {/* <SwipeCard x={rotation.sensor} state={swipeState} /> */}
-      {/* <SwipeCard style={{ zIndex: -2 }} x={0} state={"normal"} /> */}
-    </View>
+      <TView style={{ zIndex: -1000, position: "absolute", width: "100%", height: "100%", flex: 1, justifyContent: "center", alignItems: "center" }}>
+        <TText>No more users!</TText>
+      </TView>
+    </TView>
   );
 }
