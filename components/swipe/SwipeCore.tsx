@@ -2,10 +2,11 @@ import { DeviceMotion } from "expo-sensors";
 import { useCallback, useEffect, useState } from "react";
 import { Subscription } from "expo-modules-core/build/EventEmitter";
 import SwipeCard from "./SwipeCard";
-import { View } from "react-native";
+import { ToastAndroid } from "react-native";
 import { UserData } from "@/logic/userData";
 import { TView } from "../theme/TView";
 import { TText } from "../theme/TText";
+import { addFriend } from "@/logic/friendManager";
 
 const SWAP_Y = 0.85;
 const RESET_Y = 0.1;
@@ -13,12 +14,13 @@ const RESET_Y = 0.1;
 export type SwipeState = "normal" | "swipe_left" | "swipe_right";
 
 export default function SwipeCore({
-  users
+  users: users_out
 }: {
   users: UserData[];
 }) {
-  const [realX, setRealX] = useState(0.0);
+  const [users] = useState(users_out);
 
+  const [realX, setRealX] = useState(0.0);
   const [childX, setChildX] = useState(0.0);
 
   const _subscribe = useCallback(() => {
@@ -59,6 +61,11 @@ export default function SwipeCore({
         if (gamma >= SWAP_Y) {
           setSwipeState("swipe_right");
           console.log("right");
+
+          const text = `Added ${users[selectedCard].name} to friends!`;
+          ToastAndroid.show(text, ToastAndroid.SHORT);
+          addFriend(users[selectedCard].uid);
+
           setChildX(0);
         } else if (gamma <= -SWAP_Y) {
           setSwipeState("swipe_left");
@@ -78,7 +85,7 @@ export default function SwipeCore({
         }
         break;
     }
-  }, [realX, swipeState]);
+  }, [realX, selectedCard, swipeState, users]);
 
   return (
     <TView style={[{ width: "100%", height: "100%", position: "relative" }]}>

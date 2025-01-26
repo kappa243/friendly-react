@@ -6,7 +6,6 @@ import { UserData, useUserBlurImage, useUserImage } from "@/logic/userData";
 import { TText } from "../theme/TText";
 import TBlurImage from "../theme/TBlurImage";
 import { useThemeColor } from "@/hooks/useThemeColor";
-import { TView } from "../theme/TView";
 
 export default function SwipeCard({
   data,
@@ -22,7 +21,7 @@ export default function SwipeCard({
 
   const translateX = useSharedValue<number>(0.0);
   const [swiped, setSwiped] = useState(false);
-  const [color] = useState([Math.random() * 255, Math.random() * 255, Math.random() * 255]);
+  const [color] = useState([Math.random() * 160, Math.random() * 160, Math.random() * 160]);
 
   const animatedStyle = useAnimatedStyle(() => ({
     transform: [{
@@ -91,7 +90,6 @@ export default function SwipeCard({
       <View style={{ height: "40%", width: "100%", justifyContent: "center", alignItems: "center" }}>
         <TText style={{
           fontSize: 24,
-          color: `rgb(${255 - color[0]},${255 - color[1]},${255 - color[2]})`,
         }}>
           {data.name}
         </TText>
