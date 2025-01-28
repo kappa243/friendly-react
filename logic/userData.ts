@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { getDBRef, useDBRef } from "@/logic/database";
 import { BaseBlurImage, BaseImage } from "@/constants/BaseImage";
 import { getUser, UserID } from "@/logic/userStore";
+import {LocationObject} from "expo-location";
 
 const users_path = "/users";
 
@@ -46,6 +47,11 @@ export function setUserBlurImage(blurImage: string) {
   return setUserData({ blurImage: blurImage });
 }
 
+export function setUserLocation(location: LocationObject) {
+  console.log("change %d %d", location.coords.latitude, location.coords.longitude);
+  return setUserData({ location: location });
+}
+
 export type UserData = {
   uid: UserID;
   name: string;
@@ -53,6 +59,7 @@ export type UserData = {
   description?: string;
   image?: string;
   blurImage?: string;
+  location?: LocationObject;
 }
 
 export async function getUserData(uid?: UserID): Promise<UserData | null> {

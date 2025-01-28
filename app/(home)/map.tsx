@@ -1,14 +1,16 @@
 import {LatLng, LeafletView, MapMarker} from "react-native-leaflet-view";
-import React, {useEffect, useState} from "react";
+import React, {useContext, useEffect, useState} from "react";
 import {TView} from "@/components/theme/TView";
 import {getUserData, UserData, useUserData} from "@/logic/userData";
 import {useFriendList} from "@/logic/friendManager";
 import {ActivityIndicator} from "react-native";
+import {LocationContext} from "@/components/LocationProvider";
 
 export default function Map() {
+  const location = useContext(LocationContext);
   const [mapCenterPosition, setMapCenterPosition]: LatLng = useState({
-    lat: 50.0469432,
-    lng: 19.997153435836697
+    lat: location.coords.latitude,
+    lng: location.coords.longitude
   });
 
   const userData = useUserData();
@@ -16,6 +18,7 @@ export default function Map() {
 
   const [friendsData, setFriendsData] = useState<UserData[]>([]);
   const [markers, setMarkers] = useState<MapMarker[]>([]);
+
   useEffect(() => {
     if (!friends) {
       setFriendsData([]);
@@ -29,17 +32,21 @@ export default function Map() {
 
   }, [friends]);
   useEffect(() => {
-    setMarkers(friendsData.map(friend =>  {
-      return {
-        position: mapCenterPosition,
-        icon: "https://img.icons8.com/?size=100&id=19326&format=png&color=000000",
-        size: [32,32],
-        title: friend.name
-      };
-    }));
+    setMarkers(friendsData.filter((friend) => friend.location)
+      .map(friend =>  {
+        return {
+          position: {
+            lat: friend.location!.coords.latitude,
+            lng: friend.location!.coords.longitude,
+          },
+          icon: "https://img.icons8.com/?size=100&id=19326&format=png&color=000000",
+          size: [32,32],
+          title: friend.name
+        };
+      }));
   }, [friendsData, mapCenterPosition]);
   return (
-    <TView 
+    <TView
       style={{
         flex: 1,
         justifyContent: "center",
