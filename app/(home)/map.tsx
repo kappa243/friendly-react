@@ -31,8 +31,16 @@ export default function Map() {
       });
 
   }, [friends]);
+
   useEffect(() => {
-    setMarkers(friendsData.filter((friend) => friend.location)
+    setMapCenterPosition({
+      lat: location.coords.latitude,
+      lng: location.coords.longitude
+    });
+  }, [location]);
+
+  useEffect(() => {
+    const friendMarkers = friendsData.filter((friend) => friend.location)
       .map(friend =>  {
         return {
           position: {
@@ -43,8 +51,18 @@ export default function Map() {
           size: [32,32],
           title: friend.name
         };
-      }));
-  }, [friendsData, mapCenterPosition]);
+      });
+    friendMarkers.push({
+      position: {
+        lat: location!.coords.latitude,
+        lng: location!.coords.longitude,
+      },
+      icon: "https://img.icons8.com/?size=100&id=19326&format=png&color=000000",
+      size: [32,32],
+      title: "You"
+    });
+    setMarkers( friendMarkers);
+  }, [friendsData, location, mapCenterPosition]);
   return (
     <TView
       style={{

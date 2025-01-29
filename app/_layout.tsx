@@ -104,12 +104,12 @@ export default function RootLayout() {
     console.log("start location");
     const interval = setInterval(() => {
       getCurrentLocation();
-    }, 5000);
+    }, 500000);
     return () => {
       clearInterval(interval);
       console.log("stopped location");
     };
-  }, [location]);
+  }, [location, user, userData]);
   if (!appReady) {
     return <Slot />;
   }
