@@ -24,6 +24,7 @@ export default function SwipeCore({
   const [childX, setChildX] = useState(0.0);
 
   const _subscribe = useCallback(() => {
+    DeviceMotion.setUpdateInterval(1000);
     const sub = DeviceMotion.addListener((data) => {
       if (data?.rotation?.gamma) {
         setRealX(data.rotation.gamma);
