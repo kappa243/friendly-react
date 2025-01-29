@@ -1,13 +1,13 @@
 import { useFadeAnimation } from "@/hooks/useFadeInAnimation";
-import { Image, ImageProps, ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
+import { DimensionValue, Image, ImageProps, ImageSourcePropType, StyleProp, StyleSheet, View, ViewStyle } from "react-native";
 import { Blurhash } from "react-native-blurhash";
 import { useEffect, useState } from "react";
 import Animated from "react-native-reanimated";
 
 export type BlurImageProps = ImageProps & {
   blurhash: string;
-  width: number;
-  height: number;
+  width: DimensionValue;
+  height: DimensionValue;
   borderRadius?: number;
   containerStyle?: StyleProp<ViewStyle>,
   blurhashStyle?: StyleProp<ViewStyle>,
@@ -34,7 +34,7 @@ export function TBlurImage({
 
   const [fadedIn, opacity, startFadeIn, startFadeOut] = useFadeAnimation(transitionDuration);
   const [, blurOpacity, startBlurFadeIn, , isBlurAnimating] = useFadeAnimation(fadeInDuration);
-  const imageDimensions = { width, height };
+  const imageDimensions: { width: DimensionValue, height: DimensionValue } = { width, height };
 
   const [ready, setReady] = useState(false);
 
