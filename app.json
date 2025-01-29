@@ -40,6 +40,12 @@
         {
           "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
         }
+      ],
+      [
+        "expo-sensors",
+        {
+          "motionPermission": "Allow Friendly to access your device motion"
+        }
       ]
     ],
     "experiments": {
