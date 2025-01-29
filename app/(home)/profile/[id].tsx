@@ -1,7 +1,7 @@
 import { TText } from "@/components/theme/TText";
 import { TView } from "@/components/theme/TView";
 import { TRouterLink } from "@/components/theme/TRouterLink";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Text, View, FlatList } from "react-native";
 import styles from "@/constants/ProfileStyles";
 import { useRoute } from "@react-navigation/native";
@@ -14,6 +14,7 @@ import TButton from "@/components/theme/TButton";
 import { addFriend, removeFriend, useFriendList, useUserList } from "@/logic/friendManager";
 import auth from "@react-native-firebase/auth";
 import { BaseImage, BaseBlurImage } from "@/constants/BaseImage";
+import Ionicons from 'react-native-vector-icons/Ionicons';
 
 
 export default function UserView() {
@@ -25,6 +26,7 @@ export default function UserView() {
   const friends = useFriendList();
 
   const [usersData, setUsersData] = useState<UserData[]>([]);
+  const visitedProfiles = useRef<string[]>([]);
 
   useEffect(() => {
     if (!users) {
@@ -115,6 +117,26 @@ export default function UserView() {
     }
     headerBackgroundColor={{ light: "#ffffff", dark: "#333333" }}
   >
+    
+    {visitedProfiles.current.length > 0 && (
+        <TRouterLink 
+          href={`/(home)/profile/${visitedProfiles.current[visitedProfiles.current.length - 1]}` as Href<string>} 
+          style={{ 
+            position: "absolute",
+            top: 0,
+            right: 28,  
+          }}
+          onPress={() => {
+            visitedProfiles.current.pop();
+          }}>
+            <Ionicons 
+              name="arrow-back-circle" 
+              size={34} 
+              style={{ 
+             }} />
+        </TRouterLink>
+    )}
+
     <TText type="title">{userData.name}</TText>
     <TText>{userData?.description || ""}</TText>
 
@@ -149,7 +171,18 @@ export default function UserView() {
           elevation: 3,
           alignItems: "center"
         }}>
-          <TRouterLink href={`/(home)/profile/${item.uid}` as Href<string>} style={{ flex: 1, paddingTop: 4 }}>
+          <TRouterLink 
+            href={`/(home)/profile/${item.uid}` as Href<string>} 
+            style={{ flex: 1, paddingTop: 4 }}
+            onPress={() => {
+              if (visitedProfiles.current.length == 0) {
+                visitedProfiles.current.push(auth().currentUser!.uid)
+              }
+              if (id && id !== visitedProfiles.current[visitedProfiles.current.length - 1]) {
+                visitedProfiles.current.push(id);
+              }
+            }}>
+
             <TBlurImage
               source={item.image ? { uri: item.image } : { uri: BaseImage }}
               width={64}
@@ -158,7 +191,7 @@ export default function UserView() {
               blurhash={item.blurImage || BaseBlurImage}
               containerStyle={{ elevation: 2 }}
             />
-            <Text style={{ color: "black", fontSize: 15 }}>  {/* No idea how to center this text vertically and add margin*/}
+            <Text style={{ color: "black", fontSize: 15 }}>
               {item.name || "Unknown User"}
             </Text>
 
